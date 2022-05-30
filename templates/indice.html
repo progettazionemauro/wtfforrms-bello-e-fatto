@@ -11,6 +11,10 @@
 {% endblock %}
 
 
+{% for message in get_flashed_messages() %}
+        <div class="alert alert-danger">{{ message }}</div>
+    {% endfor %}
+
 {% block content %}
 
     <h1>Flask-WTF Tutorial</h1>

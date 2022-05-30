@@ -10,6 +10,10 @@
 
 {% endblock %}
 
+{% for message in get_flashed_messages() %}
+        <div class="alert alert-danger">{{ message }}</div>
+    {% endfor %}
+
 {% block content %}
 
     <div class="success-wrapper">
