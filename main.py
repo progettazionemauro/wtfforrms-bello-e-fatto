@@ -7,41 +7,31 @@ app = Flask(__name__)
 #app.config["EXPLAIN_TEMPLATE_LOADING"] = True
 app.config['SECRET_KEY'] = '1234'
 
-@app.route("/")
-def home():
-    """Landing page."""
-    return render_template(
-        "base.html", title="Flask-WTF tutorial"
-    )
+messages = [{'title': 'Message One',
+             'content': 'Message One Content'},
+            {'title': 'Message Two',
+             'content': 'Message Two Content'}
+            ]
 
+@app.route('/')
+def index():
+    return render_template('index.html', messages=messages)
 
-@app.route("/contact", methods=["GET", "POST"])
-def contact():
-    """Standard `contact` form."""
-    form = ContactForm()
-    if form.validate_on_submit():
-        return redirect(url_for("success"))
-    return render_template(
-        "contact.jinja2.html", form=form, title="Contact Form"
-    )
-    
+@app.route('/create/', methods=('GET', 'POST'))
+def create():
+    if request.method == 'POST':
+        title = request.form['title']
+        content = request.form['content']
 
+        if not title:
+            flash('Title is required!')
+        elif not content:
+            flash('Content is required!')
+        else:
+            messages.append({'title': title, 'content': content})
+            return redirect(url_for('index'))
 
-@app.route("/signup", methods=["GET", "POST"])
-def signup():
-    """User sign-up form for account creation."""
-    form = SignupForm()
-    if form.validate_on_submit():
-        flash("INSERITO SIGNUP")
-    
-    return render_template("signup.jinja2.html", form=form, title="Signup Form")
-
-
-@app.route("/success", methods=["GET", "POST"])
-def success():
-    """Generic success page upon form submission."""
-    return render_template("success.jinja2.html")
-app.run(host='0.0.0.0', port=81)
+    return render_template('create.html')
 
 
 
