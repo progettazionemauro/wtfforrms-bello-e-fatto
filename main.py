@@ -1,4 +1,4 @@
-from flask import Flask, flash, redirect
+from flask import Flask, flash, redirect, url_for
 # from app import app
 from flask import render_template, request
 from forms import ContactForm, SignupForm
@@ -11,7 +11,7 @@ app.config['SECRET_KEY'] = '1234'
 def home():
     """Landing page."""
     return render_template(
-        "indice.html", title="Flask-WTF tutorial"
+        "base.html", title="Flask-WTF tutorial"
     )
 
 
@@ -20,11 +20,11 @@ def contact():
     """Standard `contact` form."""
     form = ContactForm()
     if form.validate_on_submit():
-      flash("INSERITO CONTATTO")
-      return redirect(url_for("success"))
+        return redirect(url_for("success"))
     return render_template(
         "contact.jinja2.html", form=form, title="Contact Form"
     )
+    
 
 
 @app.route("/signup", methods=["GET", "POST"])
@@ -33,10 +33,8 @@ def signup():
     form = SignupForm()
     if form.validate_on_submit():
         flash("INSERITO SIGNUP")
-        return redirect(url_for("success"))
-    return render_template(
-        "signup.jinja2.html", form=form, title="Signup Form"
-    )
+    
+    return render_template("signup.jinja2.html", form=form, title="Signup Form")
 
 
 @app.route("/success", methods=["GET", "POST"])
